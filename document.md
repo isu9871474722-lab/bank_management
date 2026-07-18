@@ -11,17 +11,20 @@ The application is built using a clean, modular structure:
 ```
 bank_management/
 │
+├── backend/                  # Python backend code
+│   ├── auth_manager.py       # Authentication and session handling
+│   ├── bank_management_system.py # CLI welcome page and router driver
+│   ├── bank_operations.py    # Core CLI business logic and DB transactions
+│   ├── cli_renderer.py       # CLI text rendering, validation, and table grids
+│   ├── db_manager.py         # Database connectivity, pooling, and schemas
+│   └── web_server.py         # Flask Web Server exposing REST APIs
+│
 ├── static/                   # Web UI frontend assets
 │   ├── index.html            # SPA page structure
 │   ├── style.css             # Premium CSS styling
 │   └── app.js                # Frontend SPA controller and API caller
 │
-├── auth_manager.py           # Authentication and session handling
-├── bank_management_system.py # CLI welcome page and router driver
-├── bank_operations.py        # Core CLI business logic and DB transactions
-├── cli_renderer.py           # CLI text rendering, validation, and table grids
-├── db_manager.py             # Database connectivity, pooling, and schemas
-├── web_server.py             # Flask Web Server exposing REST APIs
+├── document.md               # Project documentation
 └── .gitignore                # Excludes credentials and build caches
 ```
 
@@ -126,7 +129,7 @@ The Web UI features a premium design system built with:
 ### Run the Web Interface
 1. Run the server script:
    ```bash
-   python web_server.py
+   python backend/web_server.py
    ```
 2. Open your web browser and navigate to:
    ```
@@ -137,6 +140,6 @@ The Web UI features a premium design system built with:
 ### Run the CLI Interface
 1. Open your terminal and run:
    ```bash
-   python bank_management_system.py
+   python backend/bank_management_system.py
    ```
 2. Navigate menus using numeric console selections.

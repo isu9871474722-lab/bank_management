@@ -5,7 +5,7 @@ from flask import Flask, request, jsonify, send_from_directory
 # Add current folder to path to import local modules correctly
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
-app = Flask(__name__, static_folder='static', static_url_path='')
+app = Flask(__name__, static_folder='../static', static_url_path='')
 
 @app.route('/')
 def index():
