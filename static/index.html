@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apex Banking Corporation</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom Style -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Notification Toast Container -->
+    <div id="toast-container"></div>
+
+    <!-- MAIN APP CONTAINER -->
+    <div id="app">
+
+        <!-- ==================== 1. SETUP WIZARD VIEW ==================== -->
+        <div id="setup-view" class="view active-view hidden">
+            <div class="glass-card auth-card animate-fade-in">
+                <div class="brand">
+                    <i class="fa-solid fa-database brand-icon"></i>
+                    <h2>Database Setup Wizard</h2>
+                    <p>Configure local MySQL credentials to initialize database.</p>
+                </div>
+                <form id="setup-form">
+                    <div class="input-group">
+                        <label for="setup-host"><i class="fa-solid fa-server"></i> Host</label>
+                        <input type="text" id="setup-host" placeholder="localhost" value="localhost">
+                    </div>
+                    <div class="input-group">
+                        <label for="setup-user"><i class="fa-solid fa-user-shield"></i> Username</label>
+                        <input type="text" id="setup-user" placeholder="root" value="root" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="setup-password"><i class="fa-solid fa-key"></i> Password</label>
+                        <input type="password" id="setup-password" placeholder="MySQL Password">
+                    </div>
+                    <div class="input-group">
+                        <label for="setup-port"><i class="fa-solid fa-network-wired"></i> Port</label>
+                        <input type="number" id="setup-port" placeholder="3306" value="3306" required>
+                    </div>
+                    <button type="submit" class="btn primary-btn"><i class="fa-solid fa-circle-play"></i> Initialize System</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- ==================== 2. PORTAL SELECTION VIEW ==================== -->
+        <div id="portal-view" class="view active-view hidden">
+            <div class="portal-container animate-fade-in">
+                <div class="portal-header">
+                    <i class="fa-solid fa-building-columns main-logo"></i>
+                    <h1>APEX BANKING CORPORATION</h1>
+                    <p>Welcome to our modern secured core banking portal.</p>
+                </div>
+                <div class="portal-choices">
+                    <div class="glass-card choice-card" onclick="switchView('customer-login-view')">
+                        <i class="fa-solid fa-user-astronaut choice-icon"></i>
+                        <h3>Customer Portal</h3>
+                        <p>Access your accounts, transfer funds, or view transaction statements.</p>
+                        <span class="btn secondary-btn">Login <i class="fa-solid fa-arrow-right-to-bracket"></i></span>
+                    </div>
+                    <div class="glass-card choice-card" onclick="switchView('admin-login-view')">
+                        <i class="fa-solid fa-user-gear choice-icon"></i>
+                        <h3>Staff Portal</h3>
+                        <p>Open customer accounts, view global ledger, manage status, and search profiles.</p>
+                        <span class="btn secondary-btn">Login <i class="fa-solid fa-arrow-right-to-bracket"></i></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== 3. ADMIN LOGIN VIEW ==================== -->
+        <div id="admin-login-view" class="view hidden">
+            <div class="glass-card auth-card animate-fade-in">
+                <button class="back-btn" onclick="switchView('portal-view')"><i class="fa-solid fa-arrow-left"></i> Back</button>
+                <div class="brand">
+                    <i class="fa-solid fa-user-gear brand-icon"></i>
+                    <h2>Staff Portal</h2>
+                    <p>Access administration controls.</p>
+                </div>
+                <form id="admin-login-form">
+                    <div class="input-group">
+                        <label for="admin-user"><i class="fa-solid fa-user"></i> Username</label>
+                        <input type="text" id="admin-user" placeholder="e.g., admin" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="admin-pass"><i class="fa-solid fa-lock"></i> Password</label>
+                        <input type="password" id="admin-pass" placeholder="e.g., admin123" required>
+                    </div>
+                    <button type="submit" class="btn primary-btn">Sign In <i class="fa-solid fa-right-to-bracket"></i></button>
+                </form>
+            </div>
+        </div>
+
+        <!-- ==================== 4. CUSTOMER LOGIN VIEW ==================== -->
+        <div id="customer-login-view" class="view hidden">
+            <div class="glass-card auth-card animate-fade-in">
+                <button class="back-btn" onclick="switchView('portal-view')"><i class="fa-solid fa-arrow-left"></i> Back</button>
+                <div class="brand">
+                    <i class="fa-solid fa-user-astronaut brand-icon"></i>
+                    <h2>Customer Portal</h2>
+                    <p>Access checking and savings accounts.</p>
+                </div>
+                <form id="customer-login-form">
+                    <div class="input-group">
+                        <label for="cust-acc"><i class="fa-solid fa-hashtag"></i> Account Number</label>
+                        <input type="text" id="cust-acc" placeholder="12-digit account number" required pattern="\d{12}">
+                    </div>
+                    <div class="input-group">
+                        <label for="cust-pin"><i class="fa-solid fa-key"></i> 4-Digit PIN</label>
+                        <input type="password" id="cust-pin" placeholder="Enter PIN" required pattern="\d{4}" maxlength="4">
+                    </div>
+                    <button type="submit" class="btn primary-btn">Sign In <i class="fa-solid fa-right-to-bracket"></i></button>
+                </form>
+            </div>
+        </div>
+
+        <!-- ==================== 5. ADMIN DASHBOARD VIEW ==================== -->
+        <div id="admin-dashboard-view" class="view dashboard-view hidden">
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <div class="sidebar-brand">
+                    <i class="fa-solid fa-building-columns"></i>
+                    <span>Apex Bank Staff</span>
+                </div>
+                <div class="sidebar-profile">
+                    <div class="avatar"><i class="fa-solid fa-user-tie"></i></div>
+                    <h4 id="admin-profile-name">Staff Admin</h4>
+                    <p>Administrator</p>
+                </div>
+                <nav class="sidebar-nav">
+                    <button class="nav-item active" onclick="switchAdminTab('view-accounts')">
+                        <i class="fa-solid fa-users"></i> Accounts List
+                    </button>
+                    <button class="nav-item" onclick="switchAdminTab('open-account')">
+                        <i class="fa-solid fa-user-plus"></i> Open Account
+                    </button>
+                    <button class="nav-item" onclick="switchAdminTab('global-ledger')">
+                        <i class="fa-solid fa-receipt"></i> Global Ledger
+                    </button>
+                    <button class="nav-item logout-btn" onclick="logout()">
+                        <i class="fa-solid fa-right-from-bracket"></i> Logout
+                    </button>
+                </nav>
+            </aside>
+
+            <!-- Main Content Area -->
+            <main class="dashboard-content">
+                <!-- VIEW ACCOUNTS TAB -->
+                <div id="tab-view-accounts" class="dashboard-tab active-tab">
+                    <div class="content-header">
+                        <h2>Accounts Registry</h2>
+                        <div class="search-bar">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                            <input type="text" id="admin-search-input" placeholder="Search by name, account number or phone..." oninput="handleAdminSearch(this.value)">
+                        </div>
+                    </div>
+                    
+                    <div class="glass-card table-card">
+                        <div class="table-responsive">
+                            <table class="grid-table">
+                                <thead>
+                                    <tr>
+                                        <th>Account No</th>
+                                        <th>Account Holder</th>
+                                        <th>Type</th>
+                                        <th>Balance</th>
+                                        <th>Status</th>
+                                        <th>Created At</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="admin-accounts-tbody">
+                                    <!-- Dynamic content -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- OPEN ACCOUNT TAB -->
+                <div id="tab-open-account" class="dashboard-tab">
+                    <div class="content-header">
+                        <h2>Open New Account</h2>
+                    </div>
+                    <div class="glass-card form-card">
+                        <form id="open-account-form">
+                            <div class="form-row">
+                                <div class="input-group">
+                                    <label for="open-first-name">First Name</label>
+                                    <input type="text" id="open-first-name" required placeholder="John">
+                                </div>
+                                <div class="input-group">
+                                    <label for="open-last-name">Last Name</label>
+                                    <input type="text" id="open-last-name" required placeholder="Doe">
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="input-group">
+                                    <label for="open-pin">Temporary PIN (4 Digits)</label>
+                                    <input type="password" id="open-pin" required pattern="\d{4}" placeholder="e.g. 1234" maxlength="4">
+                                </div>
+                                <div class="input-group">
+                                    <label for="open-type">Account Type</label>
+                                    <select id="open-type">
+                                        <option value="Savings">Savings Account</option>
+                                        <option value="Current">Current Account</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="input-group">
+                                    <label for="open-balance">Initial Balance ($)</label>
+                                    <input type="number" id="open-balance" min="0" step="0.01" value="0.00">
+                                </div>
+                                <div class="input-group">
+                                    <label for="open-email">Email Address</label>
+                                    <input type="email" id="open-email" placeholder="john.doe@example.com">
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="input-group">
+                                    <label for="open-phone">Phone Number</label>
+                                    <input type="text" id="open-phone" placeholder="e.g. +1234567890">
+                                </div>
+                            </div>
+                            <div class="input-group">
+                                <label for="open-address">Physical Address</label>
+                                <textarea id="open-address" placeholder="123 Main St, Springfield" rows="3"></textarea>
+                            </div>
+                            <button type="submit" class="btn primary-btn"><i class="fa-solid fa-user-plus"></i> Open Account</button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- GLOBAL LEDGER TAB -->
+                <div id="tab-global-ledger" class="dashboard-tab">
+                    <div class="content-header">
+                        <h2>Global Transaction Ledger</h2>
+                    </div>
+                    <div class="glass-card table-card">
+                        <div class="table-responsive">
+                            <table class="grid-table">
+                                <thead>
+                                    <tr>
+                                        <th>Tx ID</th>
+                                        <th>Account No</th>
+                                        <th>Type</th>
+                                        <th>Amount</th>
+                                        <th>Target Acc</th>
+                                        <th>Description</th>
+                                        <th>Timestamp</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="admin-ledger-tbody">
+                                    <!-- Dynamic content -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+
+        <!-- ==================== 6. CUSTOMER DASHBOARD VIEW ==================== -->
+        <div id="customer-dashboard-view" class="view dashboard-view hidden">
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <div class="sidebar-brand">
+                    <i class="fa-solid fa-building-columns"></i>
+                    <span>Apex Core Banking</span>
+                </div>
+                <div class="sidebar-profile">
+                    <div class="avatar"><i class="fa-solid fa-user-astronaut"></i></div>
+                    <h4 id="cust-profile-name">Customer Name</h4>
+                    <p id="cust-profile-acc">Acc: 100000000001</p>
+                </div>
+                <nav class="sidebar-nav">
+                    <button class="nav-item active" onclick="switchCustomerTab('overview')">
+                        <i class="fa-solid fa-house"></i> Overview
+                    </button>
+                    <button class="nav-item" onclick="switchCustomerTab('deposit')">
+                        <i class="fa-solid fa-money-bill-trend-up"></i> Deposit Money
+                    </button>
+                    <button class="nav-item" onclick="switchCustomerTab('withdraw')">
+                        <i class="fa-solid fa-money-bill-transfer"></i> Withdraw Money
+                    </button>
+                    <button class="nav-item" onclick="switchCustomerTab('transfer')">
+                        <i class="fa-solid fa-share-from-square"></i> Send Transfer
+                    </button>
+                    <button class="nav-item" onclick="switchCustomerTab('statement')">
+                        <i class="fa-solid fa-receipt"></i> Statement
+                    </button>
+                    <button class="nav-item" onclick="switchCustomerTab('pin')">
+                        <i class="fa-solid fa-shield-halved"></i> Security PIN
+                    </button>
+                    <button class="nav-item logout-btn" onclick="logout()">
+                        <i class="fa-solid fa-right-from-bracket"></i> Logout
+                    </button>
+                </nav>
+            </aside>
+
+            <!-- Main Content Area -->
+            <main class="dashboard-content">
+                <!-- OVERVIEW TAB -->
+                <div id="tab-cust-overview" class="dashboard-tab active-tab">
+                    <div class="content-header">
+                        <h2>Welcome</h2>
+                    </div>
+                    
+                    <div class="cust-overview-cards">
+                        <!-- Balance Card -->
+                        <div class="glass-card balance-card">
+                            <span class="card-label">Available Balance</span>
+                            <h1 id="cust-balance-display">$0.00</h1>
+                            <div class="card-meta">
+                                <span id="cust-status-badge" class="badge active-badge">Active</span>
+                                <span id="cust-type-display" class="account-type-tag">Savings</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="content-header-sub">
+                        <h3>Recent Activity</h3>
+                    </div>
+                    <div class="glass-card table-card">
+                        <div class="table-responsive">
+                            <table class="grid-table">
+                                <thead>
+                                    <tr>
+                                        <th>Tx ID</th>
+                                        <th>Type</th>
+                                        <th>Amount</th>
+                                        <th>Recipient/Sender</th>
+                                        <th>Description</th>
+                                        <th>Timestamp</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="cust-recent-tbody">
+                                    <!-- Dynamic Content -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- DEPOSIT TAB -->
+                <div id="tab-cust-deposit" class="dashboard-tab">
+                    <div class="content-header">
+                        <h2>Deposit Funds</h2>
+                    </div>
+                    <div class="glass-card form-card">
+                        <form id="cust-deposit-form">
+                            <div class="input-group">
+                                <label for="deposit-amount">Deposit Amount ($)</label>
+                                <input type="number" id="deposit-amount" min="0.01" step="0.01" required placeholder="0.00">
+                            </div>
+                            <button type="submit" class="btn primary-btn"><i class="fa-solid fa-plus-circle"></i> Complete Deposit</button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- WITHDRAW TAB -->
+                <div id="tab-cust-withdraw" class="dashboard-tab">
+                    <div class="content-header">
+                        <h2>Withdraw Funds</h2>
+                    </div>
+                    <div class="glass-card form-card">
+                        <form id="cust-withdraw-form">
+                            <div class="input-group">
+                                <label for="withdraw-amount">Withdrawal Amount ($)</label>
+                                <input type="number" id="withdraw-amount" min="0.01" step="0.01" required placeholder="0.00">
+                            </div>
+                            <button type="submit" class="btn primary-btn"><i class="fa-solid fa-minus-circle"></i> Complete Withdrawal</button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- TRANSFER TAB -->
+                <div id="tab-cust-transfer" class="dashboard-tab">
+                    <div class="content-header">
+                        <h2>Transfer Funds</h2>
+                    </div>
+                    <div class="glass-card form-card">
+                        <form id="cust-transfer-form">
+                            <div class="input-group">
+                                <label for="transfer-recipient">Recipient Account Number (12 Digits)</label>
+                                <input type="text" id="transfer-recipient" required pattern="\d{12}" placeholder="e.g. 100000000002">
+                            </div>
+                            <div class="input-group">
+                                <label for="transfer-amount">Amount to Transfer ($)</label>
+                                <input type="number" id="transfer-amount" min="0.01" step="0.01" required placeholder="0.00">
+                            </div>
+                            <button type="submit" class="btn primary-btn"><i class="fa-solid fa-paper-plane"></i> Send Transfer</button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- STATEMENT TAB -->
+                <div id="tab-cust-statement" class="dashboard-tab">
+                    <div class="content-header">
+                        <h2>Transaction History Statement</h2>
+                    </div>
+                    <div class="glass-card table-card">
+                        <div class="table-responsive">
+                            <table class="grid-table">
+                                <thead>
+                                    <tr>
+                                        <th>Tx ID</th>
+                                        <th>Type</th>
+                                        <th>Amount</th>
+                                        <th>Recipient/Sender</th>
+                                        <th>Description</th>
+                                        <th>Timestamp</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="cust-statement-tbody">
+                                    <!-- Dynamic content -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SECURITY TAB -->
+                <div id="tab-cust-pin" class="dashboard-tab">
+                    <div class="content-header">
+                        <h2>Change Security PIN</h2>
+                    </div>
+                    <div class="glass-card form-card">
+                        <form id="cust-pin-form">
+                            <div class="input-group">
+                                <label for="pin-old">Current 4-Digit PIN</label>
+                                <input type="password" id="pin-old" required pattern="\d{4}" placeholder="Current PIN" maxlength="4">
+                            </div>
+                            <div class="input-group">
+                                <label for="pin-new">New 4-Digit PIN</label>
+                                <input type="password" id="pin-new" required pattern="\d{4}" placeholder="New PIN" maxlength="4">
+                            </div>
+                            <button type="submit" class="btn primary-btn"><i class="fa-solid fa-lock"></i> Update PIN</button>
+                        </form>
+                    </div>
+                </div>
+            </main>
+        </div>
+
+        <!-- ==================== MODALS ==================== -->
+        <!-- Edit Profile Modal -->
+        <div id="edit-modal" class="modal hidden">
+            <div class="glass-card modal-content animate-zoom-in">
+                <div class="modal-header">
+                    <h3>Update Profile details</h3>
+                    <button class="close-btn" onclick="closeModal('edit-modal')">&times;</button>
+                </div>
+                <form id="edit-form">
+                    <input type="hidden" id="edit-acc-num">
+                    <div class="input-group">
+                        <label for="edit-email">Email Address</label>
+                        <input type="email" id="edit-email" placeholder="john.doe@example.com">
+                    </div>
+                    <div class="input-group">
+                        <label for="edit-phone">Phone Number</label>
+                        <input type="text" id="edit-phone" placeholder="+1234567890">
+                    </div>
+                    <div class="input-group">
+                        <label for="edit-address">Physical Address</label>
+                        <textarea id="edit-address" placeholder="Address Details" rows="2"></textarea>
+                    </div>
+                    <button type="submit" class="btn primary-btn">Save Changes</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Change Status Modal -->
+        <div id="status-modal" class="modal hidden">
+            <div class="glass-card modal-content animate-zoom-in">
+                <div class="modal-header">
+                    <h3>Modify Account Status</h3>
+                    <button class="close-btn" onclick="closeModal('status-modal')">&times;</button>
+                </div>
+                <form id="status-form">
+                    <input type="hidden" id="status-acc-num">
+                    <div class="input-group">
+                        <label for="status-select">Select New Status</label>
+                        <select id="status-select">
+                            <option value="Active">Active</option>
+                            <option value="Suspended">Suspended</option>
+                            <option value="Closed">Closed</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn primary-btn">Update Status</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Close / Delete Modal -->
+        <div id="close-modal" class="modal hidden">
+            <div class="glass-card modal-content animate-zoom-in">
+                <div class="modal-header">
+                    <h3>Close Customer Account</h3>
+                    <button class="close-btn" onclick="closeModal('close-modal')">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" id="close-acc-num">
+                    <p>Select closure method for Account: <strong id="close-acc-num-label"></strong></p>
+                    <div class="closure-options">
+                        <button class="btn secondary-btn" onclick="confirmAccountClosure('soft')">
+                            <strong>Soft Closure</strong>
+                            <span>Update status to Closed (preserves history)</span>
+                        </button>
+                        <button class="btn delete-btn" onclick="confirmAccountClosure('hard')">
+                            <strong>Permanent Hard Delete</strong>
+                            <span>Remove account & transactions permanently</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Application Script -->
+    <script src="app.js"></script>
+</body>
+</html>
